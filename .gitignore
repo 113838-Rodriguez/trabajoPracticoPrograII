@@ -1,0 +1,21 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.rsuser
+
+# Compilaciones .NET
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+
+# Archivos temporales
+*.log
+*.tmp
+*.cache
+*.bak
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
