@@ -1,9 +1,15 @@
 using Ferreteria.Models;
+using Ferreteria.Repositories;
+using Ferreteria.Repositories.Interfaces;
+using Ferreteria.Services;
+using Ferreteria.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IUbicacionRepository, UbicacionRepository>();
+builder.Services.AddScoped<IUbicacionService, UbicacionService>();
 
 // aca cambien el nombre de la variable por el nombre de la coneccion del appseting de cada uno
 string connectionName = "FabrizioConnection";
