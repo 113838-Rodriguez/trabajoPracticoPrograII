@@ -22,7 +22,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools
 
 dotnet tool install --global dotnet-ef
 
-
+dotnet add package System.Security.Cryptography.Pkcs --version 10.0.14
 
 //swagger
 

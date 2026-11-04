@@ -6,10 +6,6 @@ namespace Ferreteria.Models;
 
 public partial class FerreteriaContext : DbContext
 {
-    public FerreteriaContext()
-    {
-    }
-
     public FerreteriaContext(DbContextOptions<FerreteriaContext> options)
         : base(options)
     {
@@ -75,6 +71,8 @@ public partial class FerreteriaContext : DbContext
 
     public virtual DbSet<Puesto> Puestos { get; set; }
 
+    public virtual DbSet<Role> Roles { get; set; }
+
     public virtual DbSet<Stock> Stocks { get; set; }
 
     public virtual DbSet<Sucursale> Sucursales { get; set; }
@@ -89,7 +87,8 @@ public partial class FerreteriaContext : DbContext
 
     public virtual DbSet<TransferenciasStock> TransferenciasStocks { get; set; }
 
-   
+    public virtual DbSet<Usuario> Usuarios { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Barrio>(entity =>
@@ -740,6 +739,20 @@ public partial class FerreteriaContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(e => e.RolId).HasName("PK_Rol");
+
+            entity.ToTable("ROLES");
+
+            entity.HasIndex(e => e.Nombre, "UQ_Rol_Nombre").IsUnique();
+
+            entity.Property(e => e.RolId).HasColumnName("RolID");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Stock>(entity =>
         {
             entity.HasKey(e => e.StockId).HasName("PK_Stock");
@@ -849,6 +862,37 @@ public partial class FerreteriaContext : DbContext
                 .HasForeignKey(d => d.SucursalOrigenId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_TransferenciaStock_SucursalOrigen");
+        });
+
+        modelBuilder.Entity<Usuario>(entity =>
+        {
+            entity.HasKey(e => e.UsuarioId).HasName("PK_Usuario");
+
+            entity.ToTable("USUARIOS");
+
+            entity.HasIndex(e => e.EmpleadoId, "UQ_Usuario_Empleado").IsUnique();
+
+            entity.HasIndex(e => e.NombreUsuario, "UQ_Usuario_Nombre").IsUnique();
+
+            entity.Property(e => e.UsuarioId).HasColumnName("UsuarioID");
+            entity.Property(e => e.Activo).HasDefaultValue(true);
+            entity.Property(e => e.EmpleadoId).HasColumnName("EmpleadoID");
+            entity.Property(e => e.NombreUsuario)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.PasswordHash)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.RolId).HasColumnName("RolID");
+
+            entity.HasOne(d => d.Empleado).WithOne(p => p.Usuario)
+                .HasForeignKey<Usuario>(d => d.EmpleadoId)
+                .HasConstraintName("FK_Usuario_Empleado");
+
+            entity.HasOne(d => d.Rol).WithMany(p => p.Usuarios)
+                .HasForeignKey(d => d.RolId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Usuario_Rol");
         });
 
         OnModelCreatingPartial(modelBuilder);

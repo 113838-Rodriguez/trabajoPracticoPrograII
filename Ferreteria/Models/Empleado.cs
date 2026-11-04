@@ -32,4 +32,6 @@ public partial class Empleado
     public virtual Puesto Puesto { get; set; } = null!;
 
     public virtual Sucursale Sucursal { get; set; } = null!;
+
+    public virtual Usuario? Usuario { get; set; }
 }
