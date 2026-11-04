@@ -22,7 +22,10 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools
 
 dotnet tool install --global dotnet-ef
 
+//solucion vul.
 dotnet add package System.Security.Cryptography.Pkcs --version 10.0.14
+// JWT
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --version 10.0.14
 
 //swagger
 
