@@ -9,12 +9,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 // aca cambien el nombre de la variable por el nombre de la coneccion del appseting de cada uno
 string connectionName = "PabloConnection";
+//string connectionName = "MaxiConnection";
 
 builder.Services.AddDbContext<FerreteriaContext>(options =>
     options.UseSqlServer(
@@ -50,8 +52,8 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-builder.Services.AddScoped<IQueryReportServices, QueryReportService>();
-builder.Services.AddScoped<IQueryReportServices, QueryReportService>();
+builder.Services.AddScoped<IQueryReportService, QueryReportService>();
+builder.Services.AddScoped<IQueryReportService, QueryReportService>();
 
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 

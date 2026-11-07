@@ -8,42 +8,42 @@ namespace Ferreteria.Repositories.Interfaces
         ////==========================================Consultas de BD==========================================
         //NRO DE CONSULTA: 1 [Productos sin Ventas en los Últimos N Días y su Capital Inmovilizado]
         //PABLO
-        private List<QueryReportDTO1> GetProductosSinVentas()
+        private List<QRProductosSinVentasDTO> GetProductosSinVentas()
         {
             throw new NotImplementedException();
         }
 
         //NRO DE CONSULTA: 2 [Consulta de Stock de Productos por Sucursal]
         //MAXI
-        private List<QueryReportDTO2> GetStockbySucursal()
+        private List<QRStockbySucursalDTO> GetStockbySucursal()
         {
             throw new NotImplementedException();
         }
 
         //NRO DE CONSULTA: 3 [Reporte de ventas mensuales por empleado y sucursal]
         //PABLO
-        private List<QueryReportDTO3> GetEmpleadosySucursales()
+        private List<QREmpleadosySucursalesDTO> GetEmpleadosySucursales()
         {
             throw new NotImplementedException();
         }
 
         //NRO DE CONSULTA: 4 [Facturación por Tipo de Cliente en un Período Determinado]
         //MAXI
-        private List<QueryReportDTO4> GetFacturacionTipoCliente()
+        private List<QRFacturacionTipoClienteDTO> GetFacturacionTipoCliente()
         {
             throw new NotImplementedException();
         }
 
         //NRO DE CONSULTA: 5 [Consulta de entregas atrasadas de pedidos y reposiciones]
         //PABLO
-        private List<QueryReportDTO5> GetEntregasAtrasadas()
+        private List<QREntregasAtrasadasDTO> GetEntregasAtrasadas()
         {
             throw new NotImplementedException();
         }
 
         //NRO DE CONSULTA: 6 [Detección de Stock Mínimo y Reposición con Filtro de Ventas]
         //MAXI
-        private List<QueryReportDTO6> GetStockMinWithFilter()
+        private List<QRStockMinWithFilterDTO> GetStockMinWithFilter()
         {
             throw new NotImplementedException();
         }
