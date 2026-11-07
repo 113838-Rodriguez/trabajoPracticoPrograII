@@ -1,6 +1,10 @@
-﻿namespace Ferreteria.Repositories
+﻿using Ferreteria.Models;
+using Ferreteria.Repositories.Interfaces;
+
+namespace Ferreteria.Repositories
 {
-    public class QueryReportRepository
+    public class QueryReportRepository(FerreteriaContext db) : IQueryReportRepository
     {
+        public readonly FerreteriaContext _db = db;
     }
 }

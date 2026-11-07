@@ -50,6 +50,9 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IQueryReportServices, QueryReportService>();
+builder.Services.AddScoped<IQueryReportServices, QueryReportService>();
+
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
