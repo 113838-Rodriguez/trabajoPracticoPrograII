@@ -26,6 +26,7 @@ namespace Ferreteria.Repositories
         }
 
         //Busca producto por su ID INTERNO (productoId), si no lo encuentra devuelve null
+        //
         public async Task<Producto?> GetByIdAsync(int id)
         {
             return await _context.Productos
@@ -44,7 +45,7 @@ namespace Ferreteria.Repositories
         }
 
         //Chequea si existe un producto con el mismo codigo, si se pasa un productoId, se excluye de la busqueda
-        public async Task<bool> ExistsCodigoAsync(string codigo, int? productoId = null)
+        public async Task<bool> ExistsCodigoOrIdAsync(string codigo, int? productoId = null)
         {
             return await _context.Productos.AnyAsync(p =>
             p.Codigo == codigo &&

@@ -9,9 +9,9 @@ namespace Ferreteria.Services.Interfaces
     {
         Task<IEnumerable<ProductoResponseDTO>> GetAllAsync();
 
-        Task<ProductoResponseDTO?> GetByIdAsync(int id);
+        Task<ProductoResponseDTO?> GetByIdAsync(int id, bool activoOnly);
 
-        Task<ProductoResponseDTO?> GetByCodigoAsync(string codigo);
+        Task<ProductoResponseDTO?> GetByCodigoAsync(string codigo, bool activoOnly);
 
         Task<ProductoResponseDTO> CreateAsync(CreateProductoDTO dto);
 

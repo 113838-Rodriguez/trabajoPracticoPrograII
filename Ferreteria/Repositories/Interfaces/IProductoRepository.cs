@@ -12,7 +12,7 @@ namespace Ferreteria.Repositories.Interfaces
 
         Task<Producto?> GetByCodigoAsync(string codigo);
 
-        Task<bool> ExistsCodigoAsync(string codigo, int? productoId = null);
+        Task<bool> ExistsCodigoOrIdAsync(string codigo, int? productoId = null);
 
         Task<bool> ExistsCategoriaProductoAsync(int categoriaProductoId);
 

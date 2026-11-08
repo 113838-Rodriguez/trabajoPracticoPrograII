@@ -15,35 +15,38 @@ namespace Ferreteria.Services
             _repository = repository;
         }
 
-        // CONSULTAR TODOS
         public async Task<IEnumerable<ProductoResponseDTO>> GetAllAsync()
         {
             var productos = await _repository.GetAllAsync();
 
-            return productos.Select(p => MapToResponse(p)).ToList();
+            return productos.Select(p => MapToResponse(p)).ToList(); //Convertir a DTO
         }
 
         // CONSULTAR POR ID
-        public async Task<ProductoResponseDTO?> GetByIdAsync(int id)
+        public async Task<ProductoResponseDTO?> GetByIdAsync(int id, bool activoOnly)
         {
             var producto = await _repository.GetByIdAsync(id);
 
-            if (producto == null || !producto.Activo)
+            if (producto == null || activoOnly == true)
+            {
                 return null;
+            }
 
             return MapToResponse(producto);
         }
 
         // CONSULTAR POR CODIGO
-        public async Task<ProductoResponseDTO?> GetByCodigoAsync(string codigo)
+        public async Task<ProductoResponseDTO?> GetByCodigoAsync(string codigo, bool activoOnly)
         {
             if (string.IsNullOrWhiteSpace(codigo))
                 throw new ArgumentException("El código es obligatorio.");
 
             var producto = await _repository.GetByCodigoAsync(codigo.Trim());
 
-            if (producto == null || !producto.Activo)
+            if (producto == null || activoOnly == true)
+            {
                 return null;
+            }
 
             return MapToResponse(producto);
         }
@@ -52,10 +55,16 @@ namespace Ferreteria.Services
         public async Task<ProductoResponseDTO> CreateAsync(CreateProductoDTO dto)
         {
             string codigo = dto.Codigo.Trim();
+
+            if (string.IsNullOrWhiteSpace(dto.Descripcion))
+            {
+                throw new ArgumentException("La descripción es obligatoria.");
+            }
+
             string descripcion = dto.Descripcion.Trim();
 
             // Validar código duplicado
-            await ValidateCodigoAsync(codigo);
+            await ValidateCodigoOrIdAsync(codigo);
 
             // Validar relaciones
             await ValidateReferenciasAsync(
@@ -64,7 +73,7 @@ namespace Ferreteria.Services
             );
 
             // Crear entidad
-            Producto producto = new Producto
+            Producto producto = new()
             {
                 Codigo = codigo,
                 Descripcion = descripcion,
@@ -89,8 +98,7 @@ namespace Ferreteria.Services
         }
 
         // MODIFICACION
-        public async Task<ProductoResponseDTO?> UpdateAsync(
-            int id, UpdateProductoDTO dto)
+        public async Task<ProductoResponseDTO?> UpdateAsync(int id, UpdateProductoDTO dto)
         {
             var producto = await _repository.GetByIdAsync(id);
 
@@ -98,13 +106,18 @@ namespace Ferreteria.Services
                 return null;
 
             // Validar código duplicado, excluyendo el propio producto
-            await ValidateCodigoAsync(dto.Codigo.Trim(), id);
+            await ValidateCodigoOrIdAsync(dto.Codigo.Trim(), id);
 
             // Validar relaciones
             await ValidateReferenciasAsync(
                 dto.CategoriaProductoId,
                 dto.TipoProductoId
             );
+
+            if (string.IsNullOrWhiteSpace(dto.Descripcion))
+            {
+                throw new ArgumentException("La descripción es obligatoria.");
+            }
 
             // Actualizar propiedades
             producto.Codigo = dto.Codigo.Trim();
@@ -143,13 +156,14 @@ namespace Ferreteria.Services
 
         // VALIDACIONES AUXILIARES
 
-        private async Task ValidateCodigoAsync(
-            string codigo, int? productoId = null)
+        private async Task ValidateCodigoOrIdAsync(string codigo, int? productoId = null)
         {
             if (string.IsNullOrWhiteSpace(codigo))
                 throw new ArgumentException("El código es obligatorio.");
 
-            if (await _repository.ExistsCodigoAsync(codigo, productoId))
+            codigo = codigo.Trim();
+
+            if (await _repository.ExistsCodigoOrIdAsync(codigo, productoId))
                 throw new InvalidOperationException(
                     "Ya existe un producto con el código indicado.");
         }
