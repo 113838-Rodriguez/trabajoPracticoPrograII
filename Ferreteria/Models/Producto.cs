@@ -17,6 +17,8 @@ public partial class Producto
 
     public int TipoProductoId { get; set; }
 
+    public bool Activo { get; set; }
+
     public virtual CategoriaProducto CategoriaProducto { get; set; } = null!;
 
     public virtual ICollection<DetalleCompra> DetalleCompras { get; set; } = new List<DetalleCompra>();
