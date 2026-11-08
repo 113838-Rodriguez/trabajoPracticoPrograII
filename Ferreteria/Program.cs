@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // aca cambien el nombre de la variable por el nombre de la coneccion del appseting de cada uno
-string connectionName = "MaxiConnection";
+string connectionName = "FabrizioConnection";
 
 builder.Services.AddDbContext<FerreteriaContext>(options =>
     options.UseSqlServer(
@@ -52,6 +52,12 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IProductoService, ProductoService>();
+builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
+builder.Services.AddScoped<IEmpleadoService, EmpleadoService>();
+builder.Services.AddScoped<IPuestoRepository, PuestoRepository>();
+builder.Services.AddScoped<IPuestoService, PuestoService>();
+builder.Services.AddScoped<ISucursalRepository, SucursalRepository>();
+builder.Services.AddScoped<ISucursalService, SucursalService>();
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
