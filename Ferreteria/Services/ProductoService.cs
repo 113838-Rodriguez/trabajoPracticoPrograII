@@ -21,7 +21,7 @@ namespace Ferreteria.Services
 
             return productos.Select(p => MapToResponse(p)).ToList(); //Convertir a DTO
         }
-
+        // prueba de push 
         // CONSULTAR POR ID
         public async Task<ProductoResponseDTO?> GetByIdAsync(int id, bool activoOnly)
         {
