@@ -6,7 +6,7 @@ using Microsoft.Data.SqlClient;
 namespace Ferreteria.Controllers
 {
     [ApiController]
-    [Route("api/queryreport")]
+    [Route("api/report")]
     public class QueryReportController(IQueryReportService service) : ControllerBase
     {
         private readonly IQueryReportService _service = service;
@@ -14,10 +14,19 @@ namespace Ferreteria.Controllers
         ////==========================================Consultas de BD==========================================
         //NRO DE CONSULTA: 1 [Productos sin Ventas en los Últimos N Días y su Capital Inmovilizado]
         //PABLO
-        [HttpGet]
-        public IActionResult GetProductosSinVentas()
+        [HttpGet("productos-sin-ventas/{dias}")]
+        public async Task<IActionResult> GetProductosSinVentas([FromRoute] int dias)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var resultado = await _service.GetProductosSinVentas(dias);
+                return Ok(resultado);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+
+            }
         }
 
         //NRO DE CONSULTA: 2 [Consulta de Stock de Productos por Sucursal]
@@ -39,15 +48,22 @@ namespace Ferreteria.Controllers
             {
                 return NotFound(new { mensaje = ex.Message });
             }
-
         }
 
         //NRO DE CONSULTA: 3 [Reporte de ventas mensuales por empleado y sucursal]
         //PABLO
-        [HttpGet]
-        public IActionResult GetEmpleadosySucursales()
+        [HttpGet("empleados-sucursales/{anio}/{sucursalID}/{empleadoId}")]
+        public async Task<IActionResult> GetEmpleadosySucursales([FromRoute] int? anio,[FromRoute] int? sucursalID,[FromRoute] int? empleadoId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var resultado = await _service.GetEmpleadosySucursales(anio, sucursalID, empleadoId);
+                return Ok(resultado);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
         }
 
         //NRO DE CONSULTA: 4 [Facturación por Tipo de Cliente en un Período Determinado]
@@ -68,10 +84,18 @@ namespace Ferreteria.Controllers
 
         //NRO DE CONSULTA: 5 [Consulta de entregas atrasadas de pedidos y reposiciones]
         //PABLO
-        [HttpGet]
-        public IActionResult GetEntregasAtrasadas()
+        [HttpGet("entregas-atrasadas")]
+        public async Task<IActionResult> GetEntregasAtrasadas([FromQuery] DateTime fechaReferencia)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var resultado = await _service.GetEntregasAtrasadas(fechaReferencia);
+                return Ok(resultado);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
         }
 
         //NRO DE CONSULTA: 6 [Detección de Stock Mínimo y Reposición con Filtro de Ventas]

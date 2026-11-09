@@ -11,16 +11,31 @@ namespace Ferreteria.Repositories
     {
         public readonly FerreteriaContext _db = db;
 
-        public Task<List<QREmpleadosySucursalesDTO>> GetEmpleadosySucursales()
+        //Q1.Pablo
+        public async Task<List<QRProductosSinVentasDTO>> GetProductosSinVentas(int dias)
         {
-            throw new NotImplementedException();
+            var pDias = new SqlParameter("@Dias", SqlDbType.Int) { Value = dias };
+            return await _db.Database.SqlQueryRaw<QRProductosSinVentasDTO>("EXEC sp_ProductosSinVentas @Dias", pDias).ToListAsync();
         }
 
-        public Task<List<QREntregasAtrasadasDTO>> GetEntregasAtrasadas()
+        //Q2.Maxi
+        public async Task<List<QRStockbySucursalDTO>> GetStockbySucursal(string codigoProducto)
         {
-            throw new NotImplementedException();
+            var pCodigo = new SqlParameter("@CodigoProducto", SqlDbType.VarChar, 30) { Value = codigoProducto };
+            return await _db.Database.SqlQueryRaw<QRStockbySucursalDTO>("EXEC SP_ObtenerStockProductoPorSucursal @CodigoProducto", pCodigo).ToListAsync();
         }
 
+        //Q3.Pablo
+        public async Task<List<QREmpleadosySucursalesDTO>> GetEmpleadosySucursales(int? anio, int? sucursalID, int? empleadoId)
+        {
+            var pAnio = new SqlParameter("@Anio", SqlDbType.Int) { Value = anio };
+            var pSucursalID = new SqlParameter("@SucursalID", SqlDbType.Int) { Value = sucursalID };
+            var pEmpleadoId = new SqlParameter("@EmpleadoID", SqlDbType.Int) { Value = empleadoId };
+
+            return await _db.Database.SqlQueryRaw<QREmpleadosySucursalesDTO>("EXEC sp_VentasMensualesEmpleadosPorSucursal @Anio, @SucursalID, @EmpleadoID", pAnio, pSucursalID, pEmpleadoId).ToListAsync();
+        }
+
+        //Q4.Maxi
         public async Task<List<QRFacturacionTipoClienteDTO>> GetFacturacionTipoCliente(DateTime fechaDesde, DateTime fechaHasta)
         {
             var pDesde = new SqlParameter("@FechaDesde", SqlDbType.Date) { Value = fechaDesde.Date };
@@ -29,21 +44,15 @@ namespace Ferreteria.Repositories
             return await _db.Database.SqlQueryRaw<QRFacturacionTipoClienteDTO>("EXEC sp_VentasPorTipoCliente @FechaDesde, @FechaHasta", pDesde, pHasta).ToListAsync();
         }
 
-        public Task<List<QRProductosSinVentasDTO>> GetProductosSinVentas()
+        //Q5.Pablo
+        public async Task<List<QREntregasAtrasadasDTO>> GetEntregasAtrasadas(DateTime fechaReferencia)
         {
-            throw new NotImplementedException();
+            var pFechaReferencia = new SqlParameter("@FechaReferencia", SqlDbType.Date) { Value = fechaReferencia.Date };
+
+            return await _db.Database.SqlQueryRaw<QREntregasAtrasadasDTO>("EXEC sp_EntregasAtrasadas @FechaReferencia", pFechaReferencia).ToListAsync();
         }
 
-        public async Task<List<QRStockbySucursalDTO>> GetStockbySucursal(string codigoProducto)
-
-        {
-            var pCodigo = new SqlParameter("@CodigoProducto", SqlDbType.VarChar, 30)
-            {
-                Value = codigoProducto
-            };
-            return await _db.Database.SqlQueryRaw<QRStockbySucursalDTO>("EXEC SP_ObtenerStockProductoPorSucursal @CodigoProducto", pCodigo).ToListAsync();
-        }
-
+        //Q6.Maxi
         public async Task<List<QRStockMinWithFilterDTO>> GetStockMinWithFilter(string? nombreSucursal)
         {
             var pSucursal = new SqlParameter("@NombreSucursal", SqlDbType.VarChar, 100)
@@ -51,6 +60,6 @@ namespace Ferreteria.Repositories
                 Value = (object?)nombreSucursal ?? DBNull.Value
             };
             return await _db.Database.SqlQueryRaw<QRStockMinWithFilterDTO>("EXEC SP_PRODUCTOS_BAJO_STOCK_REPOSICION @NombreSucursal", pSucursal).ToListAsync();
-        }
+        }        
     }
 }
