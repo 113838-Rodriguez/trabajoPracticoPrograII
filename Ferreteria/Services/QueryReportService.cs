@@ -1,13 +1,12 @@
-﻿using Ferreteria.DTOs;
-using Ferreteria.Repositories;
-using Ferreteria.Repositories.Interfaces;
+﻿using Ferreteria.Repositories.Interfaces;
 using Ferreteria.Services.Interfaces;
+using Ferreteria.DTOs;
 
 namespace Ferreteria.Services
 {
-    public class QueryReportService(QueryReportRepository repo) : IQueryReportService
+    public class QueryReportService(IQueryReportRepository repo) : IQueryReportService
     {
-        public readonly QueryReportRepository _repo = repo;
+        public readonly IQueryReportRepository _repo = repo;
 
         //Q1.Pablo
         public async Task<List<QRProductosSinVentasDTO>> GetProductosSinVentas(int dias)
@@ -22,7 +21,7 @@ namespace Ferreteria.Services
         {
             if (string.IsNullOrWhiteSpace(codigoProducto))
                 throw new ArgumentException("El codigo de producto tiene q ser obligatorio");
-
+            
             return await _repo.GetStockbySucursal(codigoProducto.Trim());
         }
 
@@ -32,7 +31,7 @@ namespace Ferreteria.Services
             if (anio < 2000)
                 throw new ArgumentException("El año debe ser posterior al 2000");
             if (anio > DateTime.Now.Year)
-                throw new ArgumentException("El año debe ser menor o igual al ");
+                throw new ArgumentException("El año debe ser igual o menor al año actual ");
             if (sucursalID < 0)
                 throw new ArgumentException("Valor de sucursal NO Valido");
             if (empleadoId < 0)
@@ -48,18 +47,18 @@ namespace Ferreteria.Services
                 throw new ArgumentException("Las fechas tienen que ser obligatorias");
             if (fechaDesde > fechaHasta)
                 throw new ArgumentException("La fecha desde no puede ser menor a la fecha hasta");
-
+            
             return await _repo.GetFacturacionTipoCliente(fechaDesde!.Value, fechaHasta!.Value);
         }
 
         //Q5.Pablo
-        public async Task<List<QREntregasAtrasadasDTO>> GetEntregasAtrasadas(DateTime fechaReferencia)
+        public async Task<List<QREntregasAtrasadasDTO>> GetEntregasAtrasadas(DateOnly fechaReferencia)
         {
             if (fechaReferencia == default)
-                throw new ArgumentException("La fecha es obligatorias");
-            if (fechaReferencia < new DateTime(2020, 1, 1))
+                fechaReferencia = DateOnly.FromDateTime(DateTime.Now);
+            if (fechaReferencia < new DateOnly(2020, 1, 1))
                 throw new ArgumentException("La fecha debe ser superior a 01/01/2000");
-
+            
             return await _repo.GetEntregasAtrasadas(fechaReferencia);
         }
 

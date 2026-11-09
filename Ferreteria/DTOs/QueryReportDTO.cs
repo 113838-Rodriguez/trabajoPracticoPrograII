@@ -5,7 +5,7 @@
         public string Codigo { get; set; } = null!;
         public string Descripcion { get; set; } = null!;
         public int StockActual { get; set; }
-        public decimal Precio { get; set; }
+        public decimal PrecioUnitario { get; set; }
         public decimal CapitalInmovilizado { get; set; }
     }
     public class QRStockbySucursalDTO //MAXI
@@ -19,11 +19,11 @@
     }
     public class QREmpleadosySucursalesDTO //PABLO
     {        
-        public string Descripcion { get; set; } = null!;
-        public DateOnly Periodo { get; set; }
+        public string Sucursal { get; set; } = null!;
+        public string Periodo { get; set; } = null!;
         public string Empleado { get; set; } = null!;
         public int CantidadFacturas { get; set; }
-        public decimal Total { get; set; }
+        public decimal TotalVentas { get; set; }
     }
 
     public class QRFacturacionTipoClienteDTO //MAXI
@@ -38,10 +38,10 @@
     {
         public string Tipo { get; set; } = null!;
         public int NumeroOrden { get; set; }
-        public string NombreClienteProveedor { get; set; } = null!;
+        public string ClienteProveedor { get; set; } = null!;
         public string EstadoActual { get; set; } = null!;
-        public DateOnly? FechaEntregaEstimada { get; set; }
-        public DateOnly? DiasAtraso { get; set; }
+        public DateOnly FechaEntregaEstimada { get; set; }
+        public int DiasAtraso { get; set; }
         public int UnidadesPendientes { get; set; }
     }
 

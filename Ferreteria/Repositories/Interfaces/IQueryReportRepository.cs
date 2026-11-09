@@ -1,33 +1,25 @@
 ﻿using Ferreteria.DTOs;
-using Ferreteria.Services;
 
 namespace Ferreteria.Repositories.Interfaces
 {
     public interface IQueryReportRepository
     {
         ////==========================================Consultas de BD==========================================
-        //NRO DE CONSULTA: 1 [Productos sin Ventas en los Últimos N Días y su Capital Inmovilizado]
-        //PABLO
+        //PABLO: 1 [Productos sin Ventas en los Últimos N Días y su Capital Inmovilizado]
         Task<List<QRProductosSinVentasDTO>> GetProductosSinVentas(int dias);
 
-        //NRO DE CONSULTA: 2 [Consulta de Stock de Productos por Sucursal]
-        //MAXI
+        //MAXI: 2 [Consulta de Stock de Productos por Sucursal]        
         Task<List<QRStockbySucursalDTO>> GetStockbySucursal(string codigoProducto);
 
-        //NRO DE CONSULTA: 3 [Reporte de ventas mensuales por empleado y sucursal]
-        //PABLO
+        //PABLO: 3 [Reporte de ventas mensuales por empleado y sucursal]
         Task<List<QREmpleadosySucursalesDTO>> GetEmpleadosySucursales(int? anio, int? sucursalID, int? empleadoId);
 
-        //NRO DE CONSULTA: 4 [Facturación por Tipo de Cliente en un Período Determinado]
-        //MAXI
+        //MAXI: 4 [Facturación por Tipo de Cliente en un Período Determinado]
         Task<List<QRFacturacionTipoClienteDTO>> GetFacturacionTipoCliente(DateTime fechaDesde, DateTime fechaHasta);
-
-        //NRO DE CONSULTA: 5 [Consulta de entregas atrasadas de pedidos y reposiciones]
-        //PABLO
-        Task<List<QREntregasAtrasadasDTO>> GetEntregasAtrasadas(DateTime fechaReferencia);
-
-        //NRO DE CONSULTA: 6 [Detección de Stock Mínimo y Reposición con Filtro de Ventas]
-        //MAXI
+        
+        //PABLO: 5 [Consulta de entregas atrasadas de pedidos y reposiciones]        
+        Task<List<QREntregasAtrasadasDTO>> GetEntregasAtrasadas(DateOnly fechaReferencia);        
+        //MAXI: 6 [Detección de Stock Mínimo y Reposición con Filtro de Ventas]
         Task<List<QRStockMinWithFilterDTO>> GetStockMinWithFilter(string? nombreSucursal);
         //===================================================================================================
     }

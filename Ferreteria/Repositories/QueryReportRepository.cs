@@ -1,21 +1,23 @@
-﻿using Ferreteria.DTOs;
-using Ferreteria.Models;
-using Ferreteria.Repositories.Interfaces;
+﻿using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
+using Ferreteria.Models;
+using Ferreteria.Repositories.Interfaces;
+using Ferreteria.DTOs;
 
 namespace Ferreteria.Repositories
 {
     public class QueryReportRepository(FerreteriaContext db) : IQueryReportRepository
     {
         public readonly FerreteriaContext _db = db;
-
+        
         //Q1.Pablo
         public async Task<List<QRProductosSinVentasDTO>> GetProductosSinVentas(int dias)
         {
             var pDias = new SqlParameter("@Dias", SqlDbType.Int) { Value = dias };
-            return await _db.Database.SqlQueryRaw<QRProductosSinVentasDTO>("EXEC sp_ProductosSinVentas @Dias", pDias).ToListAsync();
+            return await _db.Database.SqlQueryRaw<QRProductosSinVentasDTO>(
+                "EXEC sp_ProductosSinVentas @Dias", pDias)
+                .ToListAsync();
         }
 
         //Q2.Maxi
@@ -24,15 +26,16 @@ namespace Ferreteria.Repositories
             var pCodigo = new SqlParameter("@CodigoProducto", SqlDbType.VarChar, 30) { Value = codigoProducto };
             return await _db.Database.SqlQueryRaw<QRStockbySucursalDTO>("EXEC SP_ObtenerStockProductoPorSucursal @CodigoProducto", pCodigo).ToListAsync();
         }
-
-        //Q3.Pablo
+        
         public async Task<List<QREmpleadosySucursalesDTO>> GetEmpleadosySucursales(int? anio, int? sucursalID, int? empleadoId)
         {
-            var pAnio = new SqlParameter("@Anio", SqlDbType.Int) { Value = anio };
-            var pSucursalID = new SqlParameter("@SucursalID", SqlDbType.Int) { Value = sucursalID };
-            var pEmpleadoId = new SqlParameter("@EmpleadoID", SqlDbType.Int) { Value = empleadoId };
+            var pAnio = new SqlParameter("@Anio", SqlDbType.Int) { Value = anio as object ?? DBNull.Value };
+            var pSucursalID = new SqlParameter("@SucursalID", SqlDbType.Int) { Value = sucursalID as object ?? DBNull.Value };
+            var pEmpleadoId = new SqlParameter("@EmpleadoID", SqlDbType.Int) { Value = empleadoId as object ?? DBNull.Value };
 
-            return await _db.Database.SqlQueryRaw<QREmpleadosySucursalesDTO>("EXEC sp_VentasMensualesEmpleadosPorSucursal @Anio, @SucursalID, @EmpleadoID", pAnio, pSucursalID, pEmpleadoId).ToListAsync();
+            return await _db.Database.SqlQueryRaw<QREmpleadosySucursalesDTO>(
+                "EXEC sp_VentasMensualesEmpleadosPorSucursal @Anio, @SucursalID, @EmpleadoID",pAnio, pSucursalID, pEmpleadoId)
+                .ToListAsync();
         }
 
         //Q4.Maxi
@@ -45,12 +48,15 @@ namespace Ferreteria.Repositories
         }
 
         //Q5.Pablo
-        public async Task<List<QREntregasAtrasadasDTO>> GetEntregasAtrasadas(DateTime fechaReferencia)
+        public async Task<List<QREntregasAtrasadasDTO>> GetEntregasAtrasadas(DateOnly fechaReferencia)
         {
-            var pFechaReferencia = new SqlParameter("@FechaReferencia", SqlDbType.Date) { Value = fechaReferencia.Date };
+            var pFecha = new SqlParameter("@FechaReferencia", SqlDbType.Date) { Value = fechaReferencia.ToDateTime(TimeOnly.MinValue) };
 
-            return await _db.Database.SqlQueryRaw<QREntregasAtrasadasDTO>("EXEC sp_EntregasAtrasadas @FechaReferencia", pFechaReferencia).ToListAsync();
+            return await _db.Database.SqlQueryRaw<QREntregasAtrasadasDTO>(
+                "EXEC sp_EntregasAtrasadas @FechaReferencia",pFecha)
+                .ToListAsync();
         }
+        
 
         //Q6.Maxi
         public async Task<List<QRStockMinWithFilterDTO>> GetStockMinWithFilter(string? nombreSucursal)

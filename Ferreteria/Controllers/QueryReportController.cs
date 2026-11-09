@@ -1,7 +1,7 @@
-﻿using Ferreteria.Repositories.Interfaces;
-using Ferreteria.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Ferreteria.Repositories.Interfaces;
+using Ferreteria.Services.Interfaces;
 
 namespace Ferreteria.Controllers
 {
@@ -52,8 +52,8 @@ namespace Ferreteria.Controllers
 
         //NRO DE CONSULTA: 3 [Reporte de ventas mensuales por empleado y sucursal]
         //PABLO
-        [HttpGet("empleados-sucursales/{anio}/{sucursalID}/{empleadoId}")]
-        public async Task<IActionResult> GetEmpleadosySucursales([FromRoute] int? anio,[FromRoute] int? sucursalID,[FromRoute] int? empleadoId)
+        [HttpGet("empleados-sucursales")]
+        public async Task<IActionResult> GetEmpleadosySucursales([FromQuery] int? anio,[FromQuery] int? sucursalID,[FromQuery] int? empleadoId)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace Ferreteria.Controllers
         //NRO DE CONSULTA: 5 [Consulta de entregas atrasadas de pedidos y reposiciones]
         //PABLO
         [HttpGet("entregas-atrasadas")]
-        public async Task<IActionResult> GetEntregasAtrasadas([FromQuery] DateTime fechaReferencia)
+        public async Task<IActionResult> GetEntregasAtrasadas([FromQuery] DateOnly fechaReferencia)
         {
             try
             {
