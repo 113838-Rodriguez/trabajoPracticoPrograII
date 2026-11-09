@@ -23,11 +23,12 @@ namespace Ferreteria.Services
         }
 
         // CONSULTAR POR ID
-        public async Task<ProductoResponseDTO?> GetByIdAsync(int id, bool activoOnly)
+        public async Task<ProductoResponseDTO?> GetByIdAsync(int id, bool incluirInactivos = false)
         {
             var producto = await _repository.GetByIdAsync(id);
 
-            if (producto == null || activoOnly == true)
+            if (producto == null ||
+                (!incluirInactivos && !producto.Activo))
             {
                 return null;
             }
@@ -36,14 +37,15 @@ namespace Ferreteria.Services
         }
 
         // CONSULTAR POR CODIGO
-        public async Task<ProductoResponseDTO?> GetByCodigoAsync(string codigo, bool activoOnly)
+        public async Task<ProductoResponseDTO?> GetByCodigoAsync(string codigo, bool incluirInactivos = false)
         {
             if (string.IsNullOrWhiteSpace(codigo))
                 throw new ArgumentException("El código es obligatorio.");
 
             var producto = await _repository.GetByCodigoAsync(codigo.Trim());
 
-            if (producto == null || activoOnly == true)
+            if (producto == null ||
+                (!incluirInactivos && !producto.Activo))
             {
                 return null;
             }
@@ -151,6 +153,17 @@ namespace Ferreteria.Services
 
             await _repository.UpdateAsync(producto);
 
+            return true;
+        }
+
+        // REACTIVACION LOGICA
+        public async Task<bool> ReactivarProductoAsync(int id)
+        {
+            var producto = await _repository.GetByIdAsync(id);
+            if (producto == null || producto.Activo)
+                return false;
+            producto.Activo = true;
+            await _repository.UpdateAsync(producto);
             return true;
         }
 
