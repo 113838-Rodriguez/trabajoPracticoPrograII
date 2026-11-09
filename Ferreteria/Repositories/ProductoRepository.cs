@@ -72,7 +72,6 @@ namespace Ferreteria.Repositories
 
         public async Task UpdateAsync(Producto producto)
         {
-            _context.Productos.Update(producto);
             await _context.SaveChangesAsync();
         }
     }

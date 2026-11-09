@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // aca cambien el nombre de la variable por el nombre de la coneccion del appseting de cada uno
-string connectionName = "MaxiConnection";
+string connectionName = "AgustinConnection";
 
 builder.Services.AddDbContext<FerreteriaContext>(options =>
     options.UseSqlServer(

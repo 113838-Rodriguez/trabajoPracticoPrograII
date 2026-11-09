@@ -13,12 +13,12 @@ namespace Ferreteria.Services.Interfaces
 
         Task<ProductoResponseDTO?> GetByCodigoAsync(string codigo, bool incluirInactivos);
 
-        Task<ProductoResponseDTO> CreateAsync(CreateProductoDTO dto);
+        Task<ProductoResponseDTO> CreateAsync(ProductoRequestDTO dto);
 
-        Task<ProductoResponseDTO?> UpdateAsync(int id, UpdateProductoDTO dto);
+        Task<ProductoResponseDTO?> UpdateAsync(string codigoActual, ProductoRequestDTO dto);
 
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(string codigo);
 
-        Task<bool> ReactivarProductoAsync(int id);
+        Task<bool> ReactivarProductoAsync(string codigo);
     }
 }
