@@ -61,6 +61,8 @@ builder.Services.AddScoped<ISucursalRepository, SucursalRepository>();
 builder.Services.AddScoped<ISucursalService, SucursalService>();
 builder.Services.AddScoped<IQueryReportRepository, QueryReportRepository>();
 builder.Services.AddScoped<IQueryReportService, QueryReportService>();
+builder.Services.AddScoped<IRolRepository, RolRepository>();
+builder.Services.AddScoped<IRolService, RolService>();
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

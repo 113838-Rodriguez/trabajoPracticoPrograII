@@ -35,7 +35,9 @@ namespace Ferreteria.Repositories
         public async Task<List<SucursalComboDTO>> GetSucursales()
         {
             return await _db.Database.SqlQueryRaw<SucursalComboDTO>(
-                @"SELECT Descripcion FROM SUCURSALES ORDER BY Descripcion")
+                @"SELECT SucursalID, Descripcion
+          FROM SUCURSALES
+          ORDER BY Descripcion")
                 .ToListAsync();
         }
 
@@ -44,7 +46,7 @@ namespace Ferreteria.Repositories
             var pSucursalID = new SqlParameter("@SucursalID", SqlDbType.Int) { Value = sucursalID };
 
             return await _db.Database .SqlQueryRaw<EmpleadoComboDTO>(
-                @"SELECT CONCAT(Apellido, ', ', Nombre) 'Nombre' FROM EMPLEADOS WHERE SucursalID = @SucursalID ORDER BY Apellido, Nombre", pSucursalID)
+                @"SELECT  EmpleadoID , CONCAT(Apellido, ', ', Nombre) 'Nombre' FROM EMPLEADOS WHERE SucursalID = @SucursalID ORDER BY Apellido, Nombre", pSucursalID)
                 .ToListAsync();
         }
 
