@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -58,6 +59,8 @@ builder.Services.AddScoped<IPuestoRepository, PuestoRepository>();
 builder.Services.AddScoped<IPuestoService, PuestoService>();
 builder.Services.AddScoped<ISucursalRepository, SucursalRepository>();
 builder.Services.AddScoped<ISucursalService, SucursalService>();
+builder.Services.AddScoped<IQueryReportRepository, QueryReportRepository>();
+builder.Services.AddScoped<IQueryReportService, QueryReportService>();
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -84,7 +87,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -98,18 +100,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 var app = builder.Build();
-
-
-
 using (var scope = app.Services.CreateScope())
 {
    
 }
-
-
-
 
 if (app.Environment.IsDevelopment())
 {
