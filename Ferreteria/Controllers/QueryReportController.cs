@@ -20,12 +20,12 @@ namespace Ferreteria.Controllers
             try
             {
                 var resultado = await _service.GetProductosSinVentas(dias);
+
                 return Ok(resultado);
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(new { mensaje = ex.Message });
-
             }
         }
 
@@ -37,12 +37,12 @@ namespace Ferreteria.Controllers
             try
             {
                 var resultado = await _service.GetStockbySucursal(codigoProducto);
+
                 return Ok(resultado);
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(new { mensaje = ex.Message });
-
             }
             catch (SqlException ex) when (ex.Number == 50000)
             {
@@ -52,12 +52,34 @@ namespace Ferreteria.Controllers
 
         //NRO DE CONSULTA: 3 [Reporte de ventas mensuales por empleado y sucursal]
         //PABLO
+        [HttpGet("sucursales")]
+        public async Task<IActionResult> GetSucursales()
+        {
+            var resultado = await _service.GetSucursales();
+            return Ok(resultado);
+        }
+        [HttpGet("empleados/{sucursalID}")]
+        public async Task<IActionResult> GetEmpleadosPorSucursal([FromRoute] int sucursalID)
+        {
+            try
+            {
+                var resultado = await _service.GetEmpleadosPorSucursal(sucursalID);
+
+                return Ok(resultado);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+
         [HttpGet("empleados-sucursales")]
         public async Task<IActionResult> GetEmpleadosySucursales([FromQuery] int? anio,[FromQuery] int? sucursalID,[FromQuery] int? empleadoId)
         {
             try
             {
                 var resultado = await _service.GetEmpleadosySucursales(anio, sucursalID, empleadoId);
+
                 return Ok(resultado);
             }
             catch (ArgumentException ex)
@@ -74,6 +96,7 @@ namespace Ferreteria.Controllers
             try
             {
                 var resultado = await _service.GetFacturacionTipoCliente(fechaDesde, fechaHasta);
+
                 return Ok(resultado);
             }
             catch (ArgumentException ex)
@@ -104,6 +127,7 @@ namespace Ferreteria.Controllers
         public async Task<IActionResult> GetStockMinWithFilter([FromQuery] string? nombreSucursal)
         {
             var resultado = await _service.GetStockMinWithFilter(nombreSucursal);
+
             return Ok(resultado);
         }
         //===================================================================================================

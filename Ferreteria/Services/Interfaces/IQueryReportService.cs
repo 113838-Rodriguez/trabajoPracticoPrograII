@@ -15,6 +15,9 @@ namespace Ferreteria.Services.Interfaces
 
         //NRO DE CONSULTA: 3 [Reporte de ventas mensuales por empleado y sucursal]
         //PABLO
+        // IQueryReportRepository
+        Task<List<SucursalComboDTO>> GetSucursales();
+        Task<List<EmpleadoComboDTO>> GetEmpleadosPorSucursal(int sucursalID);
         Task<List<QREmpleadosySucursalesDTO>> GetEmpleadosySucursales(int? anio, int? sucursalID, int? empleadoId);
         
 

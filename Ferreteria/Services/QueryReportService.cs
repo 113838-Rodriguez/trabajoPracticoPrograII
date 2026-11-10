@@ -19,13 +19,22 @@ namespace Ferreteria.Services
         //Q2.Maxi
         public async Task<List<QRStockbySucursalDTO>> GetStockbySucursal(string codigoProducto)
         {
-            if (string.IsNullOrWhiteSpace(codigoProducto))
-                throw new ArgumentException("El codigo de producto tiene q ser obligatorio");
-            
-            return await _repo.GetStockbySucursal(codigoProducto.Trim());
+            return string.IsNullOrWhiteSpace(codigoProducto)
+                ? throw new ArgumentException("El codigo de producto tiene q ser obligatorio")
+                : await _repo.GetStockbySucursal(codigoProducto.Trim());
         }
 
         //Q3.Pablo
+        public async Task<List<SucursalComboDTO>> GetSucursales()
+        {
+            return await _repo.GetSucursales();
+        }
+        public async Task<List<EmpleadoComboDTO>> GetEmpleadosPorSucursal(int sucursalID)
+        {
+            return sucursalID <= 0
+                ? throw new ArgumentException("Sucursal inválida.")
+                : await _repo.GetEmpleadosPorSucursal(sucursalID);
+        }
         public async Task<List<QREmpleadosySucursalesDTO>> GetEmpleadosySucursales(int? anio, int? sucursalID, int? empleadoId)
         {
             if (anio < 2000)
@@ -65,7 +74,9 @@ namespace Ferreteria.Services
         //Q6.Maxi
         public async Task<List<QRStockMinWithFilterDTO>> GetStockMinWithFilter(string? nombreSucursal)
         {
-            var sucursal = string.IsNullOrWhiteSpace(nombreSucursal) ? null : nombreSucursal.Trim();
+            var sucursal = string.IsNullOrWhiteSpace(nombreSucursal)
+                ? null
+                : nombreSucursal.Trim();
 
             return await _repo.GetStockMinWithFilter(sucursal);
         }

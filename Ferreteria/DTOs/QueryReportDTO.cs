@@ -25,6 +25,16 @@
         public int CantidadFacturas { get; set; }
         public decimal TotalVentas { get; set; }
     }
+    public class SucursalComboDTO
+    {
+        public int SucursalID { get; set; }
+        public string Descripcion { get; set; } = null!;
+    }
+    public class EmpleadoComboDTO
+    {
+        public int EmpleadoID { get; set; }
+        public string Nombre { get; set; } = null!;
+    }
 
     public class QRFacturacionTipoClienteDTO //MAXI
     {

@@ -12,6 +12,8 @@ namespace Ferreteria.Repositories.Interfaces
         Task<List<QRStockbySucursalDTO>> GetStockbySucursal(string codigoProducto);
 
         //PABLO: 3 [Reporte de ventas mensuales por empleado y sucursal]
+        Task<List<SucursalComboDTO>> GetSucursales();
+        Task<List<EmpleadoComboDTO>> GetEmpleadosPorSucursal(int sucursalID);
         Task<List<QREmpleadosySucursalesDTO>> GetEmpleadosySucursales(int? anio, int? sucursalID, int? empleadoId);
 
         //MAXI: 4 [Facturación por Tipo de Cliente en un Período Determinado]
