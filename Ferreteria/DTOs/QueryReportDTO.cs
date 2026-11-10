@@ -10,10 +10,9 @@
     }
     public class QRStockbySucursalDTO //MAXI
     {
-        public int Codigo { get; set; }
+        public string Codigo { get; set; } = null!;
         public string Sucursal { get; set; } = null!;
         public int CantidadActual { get; set; }
-
         public string Producto { get; set; } = null!;
         public int StockMinimo { get; set; }
     }
