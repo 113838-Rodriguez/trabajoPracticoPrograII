@@ -32,7 +32,7 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
         BearerFormat = "JWT",
-        Description = "Ingresá tu token JWT sin escribir Bearer."
+        Description = "IngresÃ¡ tu token JWT sin escribir Bearer."
     });
 
     options.AddSecurityRequirement(document =>

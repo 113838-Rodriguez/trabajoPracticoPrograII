@@ -15,35 +15,39 @@ namespace Ferreteria.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<ProductoResponseDTO>> GetAllAsync()
+        public async Task<IEnumerable<ProductoResponseDTO>> GetAllAsync(bool traerInactivos = false)
         {
-            var productos = await _repository.GetAllAsync();
+            var productos = await _repository.GetAllAsync(traerInactivos);
 
             return productos.Select(p => MapToResponse(p)).ToList(); //Convertir a DTO
         }
 
         // CONSULTAR POR ID
-        public async Task<ProductoResponseDTO?> GetByIdAsync(int id, bool activoOnly)
+        public async Task<ProductoResponseDTO?> GetByIdAsync(
+            int id, bool incluirInactivos = false)
         {
             var producto = await _repository.GetByIdAsync(id);
 
-            if (producto == null || activoOnly == true)
-            {
-                return null;
+            if (producto == null || (!incluirInactivos && !producto.Activo))
+            { 
+                return null; 
             }
 
             return MapToResponse(producto);
         }
 
         // CONSULTAR POR CODIGO
-        public async Task<ProductoResponseDTO?> GetByCodigoAsync(string codigo, bool activoOnly)
+        public async Task<ProductoResponseDTO?> GetByCodigoAsync(
+            string codigo, bool incluirInactivos = false)
         {
             if (string.IsNullOrWhiteSpace(codigo))
+            { 
                 throw new ArgumentException("El código es obligatorio.");
+            }
 
             var producto = await _repository.GetByCodigoAsync(codigo.Trim());
 
-            if (producto == null || activoOnly == true)
+            if (producto == null || (!incluirInactivos && !producto.Activo))
             {
                 return null;
             }
@@ -52,15 +56,18 @@ namespace Ferreteria.Services
         }
 
         // ALTA
-        public async Task<ProductoResponseDTO> CreateAsync(CreateProductoDTO dto)
+        public async Task<ProductoResponseDTO> CreateAsync(ProductoRequestDTO dto)
         {
-            string codigo = dto.Codigo.Trim();
-
+            if (string.IsNullOrWhiteSpace(dto.Codigo))
+            {
+                throw new ArgumentException("El codigo es obligatorio.");
+            }
             if (string.IsNullOrWhiteSpace(dto.Descripcion))
             {
                 throw new ArgumentException("La descripción es obligatoria.");
             }
 
+            string codigo = dto.Codigo.Trim();
             string descripcion = dto.Descripcion.Trim();
 
             // Validar código duplicado
@@ -98,51 +105,64 @@ namespace Ferreteria.Services
         }
 
         // MODIFICACION
-        public async Task<ProductoResponseDTO?> UpdateAsync(int id, UpdateProductoDTO dto)
+
+        public async Task<ProductoResponseDTO?> UpdateAsync(string codigoActual, ProductoRequestDTO dto)
         {
-            var producto = await _repository.GetByIdAsync(id);
+            // Validaciones de entrada
+            if (string.IsNullOrWhiteSpace(codigoActual))
+                throw new ArgumentException("El código actual es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(dto.Codigo))
+                throw new ArgumentException("El nuevo código es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(dto.Descripcion))
+                throw new ArgumentException("La descripción es obligatoria.");
+
+            codigoActual = codigoActual.Trim();
+            string nuevoCodigo = dto.Codigo.Trim();
+
+            // Recuperar el producto
+            var producto = await _repository.GetByCodigoAsync(codigoActual);
 
             if (producto == null || !producto.Activo)
                 return null;
 
-            // Validar código duplicado, excluyendo el propio producto
-            await ValidateCodigoOrIdAsync(dto.Codigo.Trim(), id);
+            // Verificar que el nuevo código no pertenezca a otro producto
+            await ValidateCodigoOrIdAsync(
+                nuevoCodigo, producto.ProductoId);
 
-            // Validar relaciones
+            // Validar categoría y tipo
             await ValidateReferenciasAsync(
                 dto.CategoriaProductoId,
-                dto.TipoProductoId
-            );
+                dto.TipoProductoId);
 
-            if (string.IsNullOrWhiteSpace(dto.Descripcion))
-            {
-                throw new ArgumentException("La descripción es obligatoria.");
-            }
-
-            // Actualizar propiedades
-            producto.Codigo = dto.Codigo.Trim();
+            // Modificar propiedades
+            producto.Codigo = nuevoCodigo;
             producto.Descripcion = dto.Descripcion.Trim();
             producto.Marca = string.IsNullOrWhiteSpace(dto.Marca)
                 ? null
                 : dto.Marca.Trim();
+
             producto.CategoriaProductoId = dto.CategoriaProductoId;
             producto.TipoProductoId = dto.TipoProductoId;
 
             await _repository.UpdateAsync(producto);
 
-            var actualizado = await _repository.GetByIdAsync(id);
+            var actualizado =
+                await _repository.GetByIdAsync(producto.ProductoId);
 
             if (actualizado == null)
                 throw new InvalidOperationException(
-                    "No se pudo recuperar el producto modificado.");
+                    "No se pudo recuperar el producto actualizado.");
 
             return MapToResponse(actualizado);
         }
 
+
         // BAJA LOGICA
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(string codigo)
         {
-            var producto = await _repository.GetByIdAsync(id);
+            var producto = await _repository.GetByCodigoAsync(codigo);
 
             if (producto == null || !producto.Activo)
                 return false;
@@ -153,6 +173,45 @@ namespace Ferreteria.Services
 
             return true;
         }
+
+        // REACTIVACION LOGICA
+        public async Task<bool> ReactivarProductoAsync(string codigo)
+        {
+            var producto = await _repository.GetByCodigoAsync(codigo);
+            if (producto == null || producto.Activo)
+                return false;
+            producto.Activo = true;
+            await _repository.UpdateAsync(producto);
+            return true;
+        }
+
+
+        // CONSULTAR CATEGORIAS
+        public async Task<IEnumerable<OpcionProductoDTO>> GetCategoriasAsync()
+        {
+            var categorias = await _repository.GetCategoriasAsync();
+
+            return categorias.Select(c => new OpcionProductoDTO
+            {
+                Id = c.CategoriaProductoId,
+                Descripcion = c.Descripcion
+
+            }).ToList();
+        }
+
+        // CONSULTAR TIPOS
+        public async Task<IEnumerable<OpcionProductoDTO>> GetTiposAsync()
+        {
+            var tipos = await _repository.GetTiposAsync();
+
+            return tipos.Select(t => new OpcionProductoDTO
+            {
+                Id = t.TipoProductoId,
+                Descripcion = t.Descripcion
+
+            }).ToList();
+        }
+
 
         // VALIDACIONES AUXILIARES
 
