@@ -22,6 +22,7 @@ public partial class Cliente
     public int TipoClienteId { get; set; }
 
     public int? DomicilioId { get; set; }
+    public bool EstaActivo { get; set; } = true;
 
     public virtual ICollection<Contacto> Contactos { get; set; } = new List<Contacto>();
 

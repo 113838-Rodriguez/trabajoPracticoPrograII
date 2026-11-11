@@ -9,12 +9,13 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 // aca cambien el nombre de la variable por el nombre de la coneccion del appseting de cada uno
-string connectionName = "AgustinConnection";
+string connectionName = "FabrizioConnection";
 
 builder.Services.AddDbContext<FerreteriaContext>(options =>
     options.UseSqlServer(
@@ -31,7 +32,7 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
         BearerFormat = "JWT",
-        Description = "Ingresá tu token JWT sin escribir Bearer."
+        Description = "IngresÃ¡ tu token JWT sin escribir Bearer."
     });
 
     options.AddSecurityRequirement(document =>
@@ -58,6 +59,12 @@ builder.Services.AddScoped<IPuestoRepository, PuestoRepository>();
 builder.Services.AddScoped<IPuestoService, PuestoService>();
 builder.Services.AddScoped<ISucursalRepository, SucursalRepository>();
 builder.Services.AddScoped<ISucursalService, SucursalService>();
+builder.Services.AddScoped<IQueryReportRepository, QueryReportRepository>();
+builder.Services.AddScoped<IQueryReportService, QueryReportService>();
+builder.Services.AddScoped<IRolRepository, RolRepository>();
+builder.Services.AddScoped<IRolService, RolService>();
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -84,7 +91,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -98,18 +104,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 var app = builder.Build();
-
-
-
 using (var scope = app.Services.CreateScope())
 {
    
 }
-
-
-
 
 if (app.Environment.IsDevelopment())
 {
