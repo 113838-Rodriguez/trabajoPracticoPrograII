@@ -15,9 +15,9 @@ namespace Ferreteria.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<ProductoResponseDTO>> GetAllAsync()
+        public async Task<IEnumerable<ProductoResponseDTO>> GetAllAsync(bool traerInactivos = false)
         {
-            var productos = await _repository.GetAllAsync();
+            var productos = await _repository.GetAllAsync(traerInactivos);
 
             return productos.Select(p => MapToResponse(p)).ToList(); //Convertir a DTO
         }
@@ -184,6 +184,34 @@ namespace Ferreteria.Services
             await _repository.UpdateAsync(producto);
             return true;
         }
+
+
+        // CONSULTAR CATEGORIAS
+        public async Task<IEnumerable<OpcionProductoDTO>> GetCategoriasAsync()
+        {
+            var categorias = await _repository.GetCategoriasAsync();
+
+            return categorias.Select(c => new OpcionProductoDTO
+            {
+                Id = c.CategoriaProductoId,
+                Descripcion = c.Descripcion
+
+            }).ToList();
+        }
+
+        // CONSULTAR TIPOS
+        public async Task<IEnumerable<OpcionProductoDTO>> GetTiposAsync()
+        {
+            var tipos = await _repository.GetTiposAsync();
+
+            return tipos.Select(t => new OpcionProductoDTO
+            {
+                Id = t.TipoProductoId,
+                Descripcion = t.Descripcion
+
+            }).ToList();
+        }
+
 
         // VALIDACIONES AUXILIARES
 

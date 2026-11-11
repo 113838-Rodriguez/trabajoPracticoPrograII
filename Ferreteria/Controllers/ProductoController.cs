@@ -9,7 +9,7 @@ namespace Ferreteria.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
 
     public class ProductoController : ControllerBase
     {
@@ -21,9 +21,14 @@ namespace Ferreteria.Controllers
 
         // CONSULTAR TODOS LOS PRODUCTOS ACTIVOS
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(
+            [FromQuery] bool traerInactivos = false)
         {
-            var productos = await _service.GetAllAsync();
+            //if (traerInactivos && !User.IsInRole("admin"))
+            //   return Forbid();
+
+            var productos = await _service.GetAllAsync(traerInactivos);
+
             return Ok(productos);
         }
 
@@ -39,7 +44,7 @@ namespace Ferreteria.Controllers
                 return NotFound("Producto no encontrado.");
             }
 
-            if (!producto.Activo && !User.IsInRole("Admin"))
+            if (!producto.Activo && !User.IsInRole("admin"))
             {
                 return Forbid();
             }
@@ -63,7 +68,7 @@ namespace Ferreteria.Controllers
                 {
                     return NotFound("Producto no encontrado.");
                 }
-                if (!producto.Activo && !User.IsInRole("Admin"))
+                if (!producto.Activo && !User.IsInRole("admin"))
                 {
                     return Forbid();
                 }
@@ -86,9 +91,15 @@ namespace Ferreteria.Controllers
                 var producto = await _service.CreateAsync(dto);
                 return CreatedAtAction(nameof(GetByCodigo), new { codigo = producto.Codigo }, producto);
             }
+            // Excepcion datos invalidos
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            // Excepcion codigo duplicado
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
             }
         }
 
@@ -118,7 +129,7 @@ namespace Ferreteria.Controllers
 
         // BAJA DE PRODUCTO
         [HttpDelete("codigo/{codigo}")]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Eliminar(string codigo)
         {
             try
@@ -156,6 +167,26 @@ namespace Ferreteria.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        // CONSULTAR CATEGORIAS DE PRODUCTOS
+        [HttpGet("categorias")]
+        public async Task<IActionResult> GetCategorias()
+        {
+            var categorias = await _service.GetCategoriasAsync();
+
+            return Ok(categorias);
+        }
+
+        // CONSULTAR TIPOS DE PRODUCTOS
+        [HttpGet("tipos")]
+        public async Task<IActionResult> GetTipos()
+        {
+            var tipos = await _service.GetTiposAsync();
+
+            return Ok(tipos);
+        }
+
 
 
 

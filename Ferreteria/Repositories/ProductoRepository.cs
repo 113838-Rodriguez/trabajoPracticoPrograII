@@ -16,12 +16,13 @@ namespace Ferreteria.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Producto>> GetAllAsync()
+        public async Task<IEnumerable<Producto>> GetAllAsync(bool traerInactivos)
         {
             return await _context.Productos
-                .Where(p => p.Activo)               //Busca solo los productos activos
-                .Include(p => p.CategoriaProducto)  //Incluye la categoria del producto como string
-                .Include(p => p.TipoProducto)       //Incluye el tipo de producto como string
+                .Where(p => p.Activo == !traerInactivos)    //Busca los productos activos o inactivos segun el parametro
+                .Include(p => p.CategoriaProducto)          //Incluye la categoria del producto como string
+                .Include(p => p.TipoProducto)               //Incluye el tipo de producto como string
+                .AsNoTracking()                             
                 .ToListAsync();
         }
 
@@ -73,6 +74,22 @@ namespace Ferreteria.Repositories
         public async Task UpdateAsync(Producto producto)
         {
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<CategoriaProducto>> GetCategoriasAsync()
+        {
+            return await _context.CategoriaProductos
+                .AsNoTracking()
+                .OrderBy(c => c.Descripcion)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<TipoProducto>> GetTiposAsync()
+        {
+            return await _context.TipoProductos
+                .AsNoTracking()
+                .OrderBy(t => t.Descripcion)
+                .ToListAsync();
         }
     }
 }

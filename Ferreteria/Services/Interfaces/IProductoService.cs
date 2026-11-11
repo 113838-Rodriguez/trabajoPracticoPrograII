@@ -7,7 +7,7 @@ namespace Ferreteria.Services.Interfaces
 {
     public interface IProductoService
     {
-        Task<IEnumerable<ProductoResponseDTO>> GetAllAsync();
+        Task<IEnumerable<ProductoResponseDTO>> GetAllAsync(bool traerInactivos);
 
         Task<ProductoResponseDTO?> GetByIdAsync(int id, bool incluirInactivos);
 
@@ -20,5 +20,9 @@ namespace Ferreteria.Services.Interfaces
         Task<bool> DeleteAsync(string codigo);
 
         Task<bool> ReactivarProductoAsync(string codigo);
+
+        Task<IEnumerable<OpcionProductoDTO>> GetCategoriasAsync();
+
+        Task<IEnumerable<OpcionProductoDTO>> GetTiposAsync();
     }
 }

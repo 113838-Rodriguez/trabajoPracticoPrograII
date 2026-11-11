@@ -5,10 +5,9 @@ namespace Ferreteria.Repositories.Interfaces
 {
     public interface IProductoRepository
     {
-        Task<IEnumerable<Producto>> GetAllAsync();
+        Task<IEnumerable<Producto>> GetAllAsync(bool traerInactivos);
 
         Task<Producto?> GetByIdAsync(int id);
-
 
         Task<Producto?> GetByCodigoAsync(string codigo);
 
@@ -22,6 +21,10 @@ namespace Ferreteria.Repositories.Interfaces
 
         //UpdateAsync sirve para modificar o dar de baja un producto via el campo Activo
         Task UpdateAsync(Producto producto);
+
+        Task<IEnumerable<CategoriaProducto>> GetCategoriasAsync();
+
+        Task<IEnumerable<TipoProducto>> GetTiposAsync();
     }
 }
 
