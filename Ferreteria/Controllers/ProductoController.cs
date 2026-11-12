@@ -9,7 +9,7 @@ namespace Ferreteria.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
 
     public class ProductoController : ControllerBase
     {
@@ -22,12 +22,13 @@ namespace Ferreteria.Controllers
         // CONSULTAR TODOS LOS PRODUCTOS ACTIVOS
         [HttpGet]
         public async Task<IActionResult> GetAll(
-            [FromQuery] bool traerInactivos = false)
+            [FromQuery] bool traerInactivos = false,
+            [FromQuery] string? codigoParcial = null)
         {
             //if (traerInactivos && !User.IsInRole("admin"))
             //   return Forbid();
 
-            var productos = await _service.GetAllAsync(traerInactivos);
+            var productos = await _service.GetAllAsync(traerInactivos, codigoParcial);
 
             return Ok(productos);
         }
@@ -129,7 +130,7 @@ namespace Ferreteria.Controllers
 
         // BAJA DE PRODUCTO
         [HttpDelete("codigo/{codigo}")]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         public async Task<IActionResult> Eliminar(string codigo)
         {
             try
