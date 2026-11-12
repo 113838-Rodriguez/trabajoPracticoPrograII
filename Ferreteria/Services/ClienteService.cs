@@ -28,7 +28,7 @@ namespace Ferreteria.Services
                 FechaAlta = c.FechaAlta,
                 TipoClienteDescripcion = c.TipoCliente?.Descripcion ?? "Sin especificar",
                 DomicilioId = c.DomicilioId,
-                EstaActivo = c.EstaActivo
+                EstaActivo = c.Activo
             });
         }
 
@@ -48,7 +48,7 @@ namespace Ferreteria.Services
                 FechaAlta = c.FechaAlta,
                 TipoClienteDescripcion = c.TipoCliente?.Descripcion ?? "Sin especificar",
                 DomicilioId = c.DomicilioId,
-                EstaActivo = c.EstaActivo
+                EstaActivo = c.Activo
             };
         }
 
@@ -67,7 +67,7 @@ namespace Ferreteria.Services
                 FechaAlta = DateOnly.FromDateTime(DateTime.Now),
                 TipoClienteId = dto.TipoClienteId,
                 DomicilioId = dto.DomicilioId,
-                EstaActivo = dto.EstaActivo
+                Activo = dto.EstaActivo
             };
 
             await _repository.AddAsync(cliente);
@@ -86,7 +86,7 @@ namespace Ferreteria.Services
             cliente.Dni = dto.Dni;
             cliente.TipoClienteId = dto.TipoClienteId;
             cliente.DomicilioId = dto.DomicilioId;
-            cliente.EstaActivo = dto.EstaActivo;
+            cliente.Activo = dto.EstaActivo;
 
             await _repository.UpdateAsync(cliente);
             return true;
@@ -98,7 +98,7 @@ namespace Ferreteria.Services
             if (cliente == null) return false;
 
             
-            cliente.EstaActivo = false; 
+            cliente.Activo = false; 
             await _repository.UpdateAsync(cliente);
             return true;
         }

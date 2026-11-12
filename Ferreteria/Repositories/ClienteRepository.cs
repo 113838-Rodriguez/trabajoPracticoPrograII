@@ -16,7 +16,7 @@ namespace Ferreteria.Repositories
         {
             return await _context.Clientes
                 // No se muestran los clientes dados de baja lógicamente.
-                .Where(c => c.EstaActivo)
+                .Where(c => c.Activo)
                 .Include(c => c.TipoCliente)
                 .Include(c => c.Domicilio)
                 .ToListAsync();
@@ -25,7 +25,7 @@ namespace Ferreteria.Repositories
         {
             return await _context.Clientes
                 // Un cliente inactivo no se considera disponible para la API.
-                .Where(c => c.EstaActivo)
+                .Where(c => c.Activo)
                 .Include(c => c.TipoCliente)
                 .Include(c => c.Domicilio)
                 .FirstOrDefaultAsync(c => c.ClienteId == id);
