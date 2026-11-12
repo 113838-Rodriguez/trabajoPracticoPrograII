@@ -16,18 +16,27 @@ namespace Ferreteria.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Producto>> GetAllAsync(bool traerInactivos)
+        public async Task<IEnumerable<Producto>> GetAllAsync(bool traerInactivos, string? codigoParcial = null)
         {
-            return await _context.Productos
-                .Where(p => p.Activo == !traerInactivos)    //Busca los productos activos o inactivos segun el parametro
-                .Include(p => p.CategoriaProducto)          //Incluye la categoria del producto como string
-                .Include(p => p.TipoProducto)               //Incluye el tipo de producto como string
-                .AsNoTracking()                             
+            var query = _context.Productos
+                .Where(p => p.Activo == !traerInactivos)
+                .AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(codigoParcial))
+            {
+                string texto = codigoParcial.Trim();
+
+                query = query.Where(p => p.Codigo.Contains(texto));
+            }
+
+            return await query
+                .Include(p => p.CategoriaProducto)
+                .Include(p => p.TipoProducto)
+                .OrderBy(p => p.Codigo)
                 .ToListAsync();
         }
 
         //Busca producto por su ID INTERNO (productoId), si no lo encuentra devuelve null
-        //
         public async Task<Producto?> GetByIdAsync(int id)
         {
             return await _context.Productos

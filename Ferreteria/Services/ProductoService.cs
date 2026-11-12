@@ -15,9 +15,9 @@ namespace Ferreteria.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<ProductoResponseDTO>> GetAllAsync(bool traerInactivos = false)
+        public async Task<IEnumerable<ProductoResponseDTO>> GetAllAsync(bool traerInactivos = false, string? codigoParcial = null)
         {
-            var productos = await _repository.GetAllAsync(traerInactivos);
+            var productos = await _repository.GetAllAsync(traerInactivos, codigoParcial);
 
             return productos.Select(p => MapToResponse(p)).ToList(); //Convertir a DTO
         }

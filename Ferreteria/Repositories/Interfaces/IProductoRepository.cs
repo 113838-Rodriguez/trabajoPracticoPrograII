@@ -5,7 +5,7 @@ namespace Ferreteria.Repositories.Interfaces
 {
     public interface IProductoRepository
     {
-        Task<IEnumerable<Producto>> GetAllAsync(bool traerInactivos);
+        Task<IEnumerable<Producto>> GetAllAsync(bool traerInactivos, string? codigoParcial = null);
 
         Task<Producto?> GetByIdAsync(int id);
 
