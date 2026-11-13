@@ -1,6 +1,6 @@
 ﻿namespace Ferreteria.DTOs
 {
-    public class QRProductosSinVentasDTO //PABLO
+    public class QRProductosSinVentasDTO
     {
         public string Codigo { get; set; } = null!;
         public string Descripcion { get; set; } = null!;
@@ -8,7 +8,7 @@
         public decimal PrecioUnitario { get; set; }
         public decimal CapitalInmovilizado { get; set; }
     }
-    public class QRStockbySucursalDTO //MAXI
+    public class QRStockbySucursalDTO
     {
         public string Codigo { get; set; } = null!;
         public string Sucursal { get; set; } = null!;
@@ -16,7 +16,7 @@
         public string Producto { get; set; } = null!;
         public int StockMinimo { get; set; }
     }
-    public class QREmpleadosySucursalesDTO //PABLO
+    public class QREmpleadosySucursalesDTO
     {        
         public string Sucursal { get; set; } = null!;
         public string Periodo { get; set; } = null!;
@@ -35,7 +35,7 @@
         public string Nombre { get; set; } = null!;
     }
 
-    public class QRFacturacionTipoClienteDTO //MAXI
+    public class QRFacturacionTipoClienteDTO
     {
         public string TipoCliente { get; set; } = null!;
         public int CantidadFacturas { get; set; }
@@ -43,7 +43,7 @@
         public decimal PromedioPorFactura { get; set; }
     }
 
-    public class QREntregasAtrasadasDTO //PABLO
+    public class QREntregasAtrasadasDTO
     {
         public string Tipo { get; set; } = null!;
         public int NumeroOrden { get; set; }
@@ -54,7 +54,7 @@
         public int UnidadesPendientes { get; set; }
     }
 
-    public class QRStockMinWithFilterDTO //MAXI
+    public class QRStockMinWithFilterDTO
     {
         public string Sucursal { get; set; } = null!;
         public string Codigo { get; set; } = null!;

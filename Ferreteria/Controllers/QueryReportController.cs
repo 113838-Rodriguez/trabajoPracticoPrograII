@@ -13,7 +13,6 @@ namespace Ferreteria.Controllers
 
         ////==========================================Consultas de BD==========================================
         //NRO DE CONSULTA: 1 [Productos sin Ventas en los Últimos N Días y su Capital Inmovilizado]
-        //PABLO
         [HttpGet("productos-sin-ventas/{dias}")]
         public async Task<IActionResult> GetProductosSinVentas([FromRoute] int dias)
         {
@@ -30,7 +29,6 @@ namespace Ferreteria.Controllers
         }
 
         //NRO DE CONSULTA: 2 [Consulta de Stock de Productos por Sucursal]
-        //MAXI
         [HttpGet("stock-sucursal/{codigoProducto}")]
         public async Task<IActionResult> GetStockbySucursal(string codigoProducto)
         {
@@ -51,7 +49,6 @@ namespace Ferreteria.Controllers
         }
 
         //NRO DE CONSULTA: 3 [Reporte de ventas mensuales por empleado y sucursal]
-        //PABLO
         [HttpGet("sucursales")]
         public async Task<IActionResult> GetSucursales()
         {
@@ -89,7 +86,6 @@ namespace Ferreteria.Controllers
         }
 
         //NRO DE CONSULTA: 4 [Facturación por Tipo de Cliente en un Período Determinado]
-        //MAXI
         [HttpGet("facturacion-tipo-cliente")]
         public async Task<IActionResult> GetFacturacionTipoCliente([FromQuery] DateTime? fechaDesde, [FromQuery] DateTime? fechaHasta)
         {
@@ -106,7 +102,6 @@ namespace Ferreteria.Controllers
         }
 
         //NRO DE CONSULTA: 5 [Consulta de entregas atrasadas de pedidos y reposiciones]
-        //PABLO
         [HttpGet("entregas-atrasadas")]
         public async Task<IActionResult> GetEntregasAtrasadas([FromQuery] DateOnly fechaReferencia)
         {
@@ -122,7 +117,6 @@ namespace Ferreteria.Controllers
         }
 
         //NRO DE CONSULTA: 6 [Detección de Stock Mínimo y Reposición con Filtro de Ventas]
-        //MAXI
         [HttpGet("stock-minimo")]
         public async Task<IActionResult> GetStockMinWithFilter([FromQuery] string? nombreSucursal)
         {

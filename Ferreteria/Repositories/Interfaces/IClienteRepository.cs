@@ -10,5 +10,11 @@ namespace Ferreteria.Repositories.Interfaces
         Task UpdateAsync(Cliente cliente);
         Task DeleteAsync(Cliente cliente);
         Task<bool> ExistsDniAsync(string dni, int? clienteId = null);
+        Task<IEnumerable<Cliente>> GetInactivosAsync();
+        Task<Cliente?> GetByDniAsync(string dni);
+        Task<bool> ExistsTipoClienteAsync(int tipoClienteId);
+        Task<bool> ExistsDomicilioAsync(int domicilioId);
+        Task<IEnumerable<TipoCliente>> GetTipoClienteAllAsync();
+        Task<TipoCliente?> GetTipoClienteByIdAsync(int id);
     }
 }
