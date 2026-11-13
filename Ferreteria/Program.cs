@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // aca cambien el nombre de la variable por el nombre de la coneccion del appseting de cada uno
-string connectionName = "FabrizioConnection";
+string connectionName = "AgustinConnection";
 
 builder.Services.AddDbContext<FerreteriaContext>(options =>
     options.UseSqlServer(
@@ -65,6 +65,9 @@ builder.Services.AddScoped<IRolRepository, RolRepository>();
 builder.Services.AddScoped<IRolService, RolService>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<IStockService, StockService>();
+
 builder.Services.AddSingleton<NfcLoginService>();
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 
