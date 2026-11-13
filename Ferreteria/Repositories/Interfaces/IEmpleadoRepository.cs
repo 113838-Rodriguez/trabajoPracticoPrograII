@@ -15,5 +15,7 @@ namespace Ferreteria.Repositories.Interfaces
         Task<bool> ExistsDomicilioAsync(int domicilioId);
 
         Task AddAsync(Empleado empleado);
+
+        Task<bool> EliminarEmpleadoAsync(int id);
     }
 }

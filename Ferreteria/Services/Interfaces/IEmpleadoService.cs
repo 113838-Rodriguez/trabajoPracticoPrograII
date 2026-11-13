@@ -10,5 +10,7 @@ namespace Ferreteria.Services.Interfaces
         Task<EmpleadoResponseDTO?> GetByIdAsync(int id);
 
         Task<int> CrearEmpleadoAsync(CreateEmpleadoDTO dto);
+
+        Task<bool> EliminarEmpleadoAsync(int id);
     }
 }

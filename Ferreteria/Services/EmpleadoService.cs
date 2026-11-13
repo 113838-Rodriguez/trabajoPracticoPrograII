@@ -5,6 +5,7 @@ using Ferreteria.Services.Interfaces;
 
 namespace Ferreteria.Services
 {
+
     public class EmpleadoService : IEmpleadoService
     {
         private readonly IEmpleadoRepository _empleadoRepository;
@@ -68,6 +69,18 @@ namespace Ferreteria.Services
 
             
             return empleado.EmpleadoId;
+        }
+
+        public async Task<bool> EliminarEmpleadoAsync(int id)
+        {
+            if (id <= 0)
+            {
+                throw new InvalidOperationException(
+                    "El ID del empleado no es válido"
+                );
+            }
+
+            return await _empleadoRepository.EliminarEmpleadoAsync(id);
         }
 
         public async Task<IEnumerable<EmpleadoResponseDTO>> GetAllAsync()

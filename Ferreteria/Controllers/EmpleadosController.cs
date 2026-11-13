@@ -65,5 +65,27 @@ namespace Ferreteria.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            try
+            {
+                bool resultado = await _empleadoService.EliminarEmpleadoAsync(id);
+
+                if (!resultado)
+                {
+                    return NotFound("El empleado no existe");
+                }
+
+                return Ok("Empleado eliminado correctamente");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

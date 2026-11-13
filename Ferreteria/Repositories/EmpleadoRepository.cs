@@ -17,6 +17,7 @@ namespace Ferreteria.Repositories
         {
             return await _context.Empleados
                 .AsNoTracking()
+                .Where(e => e.Activo)
                 .ToListAsync();
         }
 
@@ -50,6 +51,31 @@ namespace Ferreteria.Repositories
             await _context.Empleados.AddAsync(empleado);
 
             await _context.SaveChangesAsync();
+        }
+
+
+        public async Task<bool> EliminarEmpleadoAsync(int id)
+        {
+            var empleado = await _context.Empleados
+                .FirstOrDefaultAsync(e => e.EmpleadoId == id);
+
+            if (empleado == null)
+            {
+                return false;
+            }
+
+            if (!empleado.Activo)
+            {
+                throw new InvalidOperationException(
+                    "El empleado ya se encuentra dado de baja."
+                );
+            }
+
+            empleado.Activo = false;
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }
