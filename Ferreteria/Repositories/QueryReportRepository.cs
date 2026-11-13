@@ -11,7 +11,6 @@ namespace Ferreteria.Repositories
     {
         public readonly FerreteriaContext _db = db;
 
-        //Q1.Pablo
         public async Task<List<QRProductosSinVentasDTO>> GetProductosSinVentas(int dias)
         {
             var pDias = new SqlParameter("@Dias", SqlDbType.Int) { Value = dias };
@@ -21,7 +20,6 @@ namespace Ferreteria.Repositories
                 .ToListAsync();
         }
 
-        //Q2.Maxi
         public async Task<List<QRStockbySucursalDTO>> GetStockbySucursal(string codigoProducto)
         {
             var pCodigo = new SqlParameter("@CodigoProducto", SqlDbType.VarChar, 30) { Value = codigoProducto };
@@ -30,8 +28,6 @@ namespace Ferreteria.Repositories
                 "EXEC SP_ObtenerStockProductoPorSucursal @CodigoProducto", pCodigo)
                 .ToListAsync();
         }
-
-        //Q3.Pablo
         public async Task<List<SucursalComboDTO>> GetSucursales()
         {
             return await _db.Database.SqlQueryRaw<SucursalComboDTO>(
@@ -61,7 +57,6 @@ namespace Ferreteria.Repositories
                 .ToListAsync();
         }
 
-        //Q4.Maxi
         public async Task<List<QRFacturacionTipoClienteDTO>> GetFacturacionTipoCliente(DateTime fechaDesde, DateTime fechaHasta)
         {
             var pDesde = new SqlParameter("@FechaDesde", SqlDbType.Date) { Value = fechaDesde.Date };
@@ -72,7 +67,6 @@ namespace Ferreteria.Repositories
                 .ToListAsync();
         }
 
-        //Q5.Pablo
         public async Task<List<QREntregasAtrasadasDTO>> GetEntregasAtrasadas(DateOnly fechaReferencia)
         {
             var pFecha = new SqlParameter("@FechaReferencia", SqlDbType.Date) { Value = fechaReferencia.ToDateTime(TimeOnly.MinValue) };
@@ -82,8 +76,6 @@ namespace Ferreteria.Repositories
                 .ToListAsync();
         }
 
-
-        //Q6.Maxi
         public async Task<List<QRStockMinWithFilterDTO>> GetStockMinWithFilter(string? nombreSucursal)
         {
             var pSucursal = new SqlParameter("@NombreSucursal", SqlDbType.VarChar, 100) { Value = nombreSucursal as object ?? DBNull.Value };

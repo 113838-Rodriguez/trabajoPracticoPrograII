@@ -8,7 +8,6 @@ namespace Ferreteria.Services
     {
         public readonly IQueryReportRepository _repo = repo;
 
-        //Q1.Pablo
         public async Task<List<QRProductosSinVentasDTO>> GetProductosSinVentas(int dias)
         {
             return dias <= 0
@@ -16,7 +15,6 @@ namespace Ferreteria.Services
                 : await _repo.GetProductosSinVentas(dias);
         }
 
-        //Q2.Maxi
         public async Task<List<QRStockbySucursalDTO>> GetStockbySucursal(string codigoProducto)
         {
             return string.IsNullOrWhiteSpace(codigoProducto)
@@ -24,7 +22,6 @@ namespace Ferreteria.Services
                 : await _repo.GetStockbySucursal(codigoProducto.Trim());
         }
 
-        //Q3.Pablo
         public async Task<List<SucursalComboDTO>> GetSucursales()
         {
             return await _repo.GetSucursales();
@@ -49,7 +46,6 @@ namespace Ferreteria.Services
             return await _repo.GetEmpleadosySucursales(anio, sucursalID, empleadoId);
         }
 
-        //Q4.Maxi
         public async Task<List<QRFacturacionTipoClienteDTO>> GetFacturacionTipoCliente(DateTime? fechaDesde, DateTime? fechaHasta)
         {
             if (fechaDesde == default || fechaHasta == default)
@@ -60,7 +56,6 @@ namespace Ferreteria.Services
             return await _repo.GetFacturacionTipoCliente(fechaDesde!.Value, fechaHasta!.Value);
         }
 
-        //Q5.Pablo
         public async Task<List<QREntregasAtrasadasDTO>> GetEntregasAtrasadas(DateOnly fechaReferencia)
         {
             if (fechaReferencia == default)
@@ -71,7 +66,6 @@ namespace Ferreteria.Services
             return await _repo.GetEntregasAtrasadas(fechaReferencia);
         }
 
-        //Q6.Maxi
         public async Task<List<QRStockMinWithFilterDTO>> GetStockMinWithFilter(string? nombreSucursal)
         {
             var sucursal = string.IsNullOrWhiteSpace(nombreSucursal)
