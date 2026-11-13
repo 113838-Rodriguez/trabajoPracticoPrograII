@@ -66,6 +66,7 @@ builder.Services.AddScoped<IRolService, RolService>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddSingleton<NfcLoginService>();
+builder.Services.AddScoped<IChatService, ChatService>();
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
