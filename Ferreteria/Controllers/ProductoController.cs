@@ -84,7 +84,7 @@ namespace Ferreteria.Controllers
 
         // ALTA DE PRODUCTO
         [HttpPost]
-        // [Authorize(Roles = "Admin")]
+        
         public async Task<IActionResult> Create([FromBody] ProductoRequestDTO dto)
         {
             try
@@ -106,7 +106,7 @@ namespace Ferreteria.Controllers
 
         // MODIFICACION DE PRODUCTO
         [HttpPut("codigo/{codigo}")]
-        // [Authorize(Roles = "Admin")]
+       
         public async Task<IActionResult> Update(string codigo, [FromBody] ProductoRequestDTO dto)
         {
             try
@@ -130,7 +130,7 @@ namespace Ferreteria.Controllers
 
         // BAJA DE PRODUCTO
         [HttpDelete("codigo/{codigo}")]
-        //[Authorize(Roles = "admin")]
+      
         public async Task<IActionResult> Eliminar(string codigo)
         {
             try
@@ -150,7 +150,7 @@ namespace Ferreteria.Controllers
 
         // REACTIVACION DE PRODUCTO
         [HttpPatch("codigo/{codigo}")]
-        // [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Reactivar(string codigo)
         {
             try
